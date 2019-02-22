@@ -12,7 +12,7 @@ var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+// app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -44,5 +44,21 @@ app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
+
+const Telegraf = require('telegraf')
+const Telegram = require('telegraf/telegram')
+
+const bot = new Telegraf(process.env.MBOT_URL)
+const telegram = new Telegram(process.env.MBOT_URL)
+
+bot.start((ctx) => ctx.reply('Welcome'))
+bot.help((ctx) => ctx.reply('Send me a sticker'))
+bot.on('sticker', (ctx) => ctx.reply('👍'))
+bot.hears('hi', (ctx) => ctx.reply('Hey there!'))
+bot.command('hehe', (ctx) => {
+	console.log(ctx.message.chat.id)
+	return ctx.reply('wkwkwkkw!')
+})
+bot.launch()
 
 module.exports = app;
