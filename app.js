@@ -8,6 +8,9 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var logs = require('./routes/logs');
 
+const LogService = require('./service/LogService');
+const CommandService = require('./service/CommandService');
+
 var app = express();
 
 // view engine setup
@@ -55,9 +58,39 @@ bot.start((ctx) => ctx.reply('Welcome'))
 bot.help((ctx) => ctx.reply('Send me a sticker'))
 bot.on('sticker', (ctx) => ctx.reply('👍'))
 bot.hears('hi', (ctx) => ctx.reply('Hey there!'))
-bot.command('hehe', (ctx) => {
-	console.log(ctx.message.chat.id)
-	return ctx.reply('wkwkwkkw!')
+bot.command('respon', (ctx) => {
+  var regex = /\[(.*?)\](?:| )\[(.*?)\]/
+  const found = ctx.message.text.match(regex);
+  if(found) {
+    const cmd = {
+      'added_at': new Date(),
+      'chat_id': ctx.message.chat.id,
+      'message_key': found[1],
+      'message_response': found[2]
+    }
+  CommandService.addCommand(cmd)
+  .then(result => {
+    return ctx.reply('mantappu!, jal ngetiko ' + found[1])
+  })
+  .catch(err => {
+    return ctx.reply('lagi error bos!')
+  })
+  } else {
+  	return ctx.reply('mbok sing bener, ngene lho\n\n/respon [pagi] [pagi juga!]')
+  }
+})
+bot.on('text', ctx => {
+      CommandService.listCommand(ctx.message.chat.id)
+      .then(result => {
+        result.forEach(function(item) {
+          if(ctx.message.text.includes(item.message_key)) {
+            return ctx.reply(item.message_response)
+          }
+        })
+      })
+      .catch(err => {
+        console.err(err)
+      });
 })
 bot.launch()
 
