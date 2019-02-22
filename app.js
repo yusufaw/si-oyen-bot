@@ -48,8 +48,8 @@ app.use(function(err, req, res, next) {
 const Telegraf = require('telegraf')
 const Telegram = require('telegraf/telegram')
 
-const bot = new Telegraf(process.env.MBOT_URL)
-const telegram = new Telegram(process.env.MBOT_URL)
+const bot = new Telegraf(process.env.MBOT_TOKEN)
+const telegram = new Telegram(process.env.MBOT_TOKEN)
 
 bot.start((ctx) => ctx.reply('Welcome'))
 bot.help((ctx) => ctx.reply('Send me a sticker'))
