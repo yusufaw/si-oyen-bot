@@ -70,9 +70,10 @@ bot.command('respon', (ctx) => {
     }
   CommandService.addCommand(cmd)
   .then(result => {
-    return ctx.reply('mantappu!, jal ngetiko ' + found[1])
+    return ctx.reply('mantap!, jal ngetiko ' + found[1])
   })
   .catch(err => {
+    console.log(err);
     return ctx.reply('lagi error bos!')
   })
   } else {
