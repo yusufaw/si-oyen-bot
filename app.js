@@ -61,6 +61,7 @@ bot.hears('hi', (ctx) => ctx.reply('Hey there!'))
 bot.command('respon', (ctx) => {
   var regex = /\[(.*?)\](?:| )\[(.*?)\]/
   const found = ctx.message.text.match(regex);
+  let isRemove = found[2].length < 1
   if(found) {
     const cmd = {
       'added_at': new Date(),
@@ -70,7 +71,11 @@ bot.command('respon', (ctx) => {
     }
   CommandService.addCommand(cmd)
   .then(result => {
-    return ctx.reply('mantap!, jal ngetiko ' + found[1])
+    if (isRemove) {
+      return ctx.reply('respon "' + found[1] + '" wis tak busak! ')
+    } else {
+      return ctx.reply('mantap!, jal ngetiko ' + found[1])
+    }
   })
   .catch(err => {
     console.log(err);
@@ -85,9 +90,10 @@ bot.command('list', (ctx) => {
   CommandService.listCommand(ctx.message.chat.id)
       .then(result => {
         result.forEach(function(item) {
-          array.push(item.message_key)
+          array.push('\n- [' + item.message_key +']')
         })
-        return ctx.reply(array)
+        var response = 'Respon sek tak simpen:' + array.toString()
+        return ctx.reply(response.replace(/,/g, ''))
       })
       .catch(err => {
         console.err(err)
