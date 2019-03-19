@@ -68,19 +68,25 @@ bot.command('respon', (ctx) => {
       'message_key': found[1],
       'message_response': found[2]
     }
-  CommandService.addCommand(cmd)
-  .then(result => {
-    let isRemove = found[2].length < 1
-    if (isRemove) {
-      return ctx.reply('respon "' + found[1] + '" wis tak busak! ')
+    if(found[2].length > 0) {
+      CommandService.addCommand(cmd)
+      .then(result => {
+          return ctx.reply('mantap! jal ngetiko ' + found[1])
+      })
+      .catch(err => {
+        console.log(err);
+        return ctx.reply('lagi error bos!')
+      })
     } else {
-      return ctx.reply('mantap!, jal ngetiko ' + found[1])
+      CommandService.removeCommand(cmd)
+      .then(result => {
+        return ctx.reply('respon "' + found[1] + '" wis tak busak! ')
+      })
+      .catch(err => {
+        console.log(err);
+        return ctx.reply('lagi error bos!')
+      })
     }
-  })
-  .catch(err => {
-    console.log(err);
-    return ctx.reply('lagi error bos!')
-  })
   } else {
   	return ctx.reply('mbok sing bener, ngene lho\n\n/respon [pagi] [pagi juga!]')
   }
