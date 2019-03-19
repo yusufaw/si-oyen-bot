@@ -61,8 +61,7 @@ bot.hears('hi', (ctx) => ctx.reply('Hey there!'))
 bot.command('respon', (ctx) => {
   var regex = /\[(.*?)\](?:| )\[(.*?)\]/
   const found = ctx.message.text.match(regex);
-  let isRemove = found[2].length < 1
-  if(found) {
+  if(found && found.length > 2) {
     const cmd = {
       'added_at': new Date(),
       'chat_id': ctx.message.chat.id,
@@ -71,6 +70,7 @@ bot.command('respon', (ctx) => {
     }
   CommandService.addCommand(cmd)
   .then(result => {
+    let isRemove = found[2].length < 1
     if (isRemove) {
       return ctx.reply('respon "' + found[1] + '" wis tak busak! ')
     } else {
