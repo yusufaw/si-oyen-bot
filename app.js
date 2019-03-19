@@ -108,11 +108,8 @@ bot.command('list', (ctx) => {
 bot.on('text', ctx => {
       CommandService.listCommand(ctx.message.chat.id)
       .then(result => {
-        result.forEach(function(item) {
-          if(ctx.message.text.includes(item.message_key)) {
-            return ctx.reply(item.message_response)
-          }
-        })
+        const res = result.filter(function(x){return ctx.message.text.includes(x.message_key)})[0]
+        if (res) return ctx.reply(res.message_response)
       })
       .catch(err => {
         console.err(err)
