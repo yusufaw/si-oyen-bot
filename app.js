@@ -121,12 +121,13 @@ bot.on('text', ctx => {
     .then(result => {
       const res = result.filter(function(x) {
         return ctx.message.text.includes(x.message_key)
-      })[0]
-      if (res) {
-        if (res.message_response.constructor === Array) {
-          return ctx.reply(res.message_response[Math.floor(Math.random() * res.message_response.length)])
+      })
+      const resRandom = res[Math.floor(Math.random() * res.length)]
+      if (resRandom) {
+        if (resRandom.message_response.constructor === Array) {
+          return ctx.reply(resRandom.message_response[Math.floor(Math.random() * resRandom.message_response.length)])
         } else {
-          return ctx.reply(res.message_response)
+          return ctx.reply(resRandom.message_response)
         }
       }
     })
