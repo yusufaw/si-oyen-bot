@@ -59,7 +59,7 @@ bot.help((ctx) => ctx.reply('Send me a sticker'))
 bot.on('sticker', (ctx) => ctx.reply('👍'))
 bot.hears('hi', (ctx) => ctx.reply('Hey there!'))
 bot.command('respon', (ctx) => {
-  var regex = /\[(.*?)\](?:| )\[(.*?)\]/
+  var regex = /\[(.*)\](?:| )\[((.|\n)*)\]/
   const found = ctx.message.text.match(regex);
   if (found && found.length > 2) {
     const cmd = {
