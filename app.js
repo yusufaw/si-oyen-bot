@@ -124,11 +124,7 @@ bot.on('text', ctx => {
       })
       const resRandom = res[Math.floor(Math.random() * res.length)]
       if (resRandom) {
-        if (resRandom.message_response.constructor === Array) {
-          return ctx.reply(resRandom.message_response[Math.floor(Math.random() * resRandom.message_response.length)])
-        } else {
-          return ctx.reply(resRandom.message_response)
-        }
+        return ctx.reply(resRandom.message_response[Math.floor(Math.random() * resRandom.message_response.length)])
       }
     })
     .catch(err => {
