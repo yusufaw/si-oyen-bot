@@ -31,10 +31,10 @@ app.use(function (err, req, res, next) {
   res.render('error');
 });
 
-bot.start((ctx) => ctx.reply('Welcome'))
+bot.start((ctx) => ctx.reply('Miaaw!'))
 bot.help((ctx) => ctx.reply('Send me a sticker'))
 bot.on('sticker', (ctx) => ctx.reply('👍'))
-bot.hears('hi', (ctx) => ctx.reply('Hey there!'))
+bot.hears('hi', (ctx) => ctx.reply('Miaaw!'))
 bot.command('respon', (ctx) => {
   var regex = /\[(.*)\](?:| )\[((.|\n)*)\]/
   const found = ctx.message.text.match(regex);
