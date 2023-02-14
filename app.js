@@ -1,4 +1,5 @@
 const express = require('express');
+const res = require('express/lib/response');
 var path = require('path');
 const { Telegraf } = require('telegraf')
 require('dotenv').config();
@@ -13,14 +14,14 @@ var app = express();
 app.use('/', index);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -82,7 +83,7 @@ bot.command('list', (ctx) => {
   var array = []
   CommandService.listCommand(ctx.message.chat.id)
     .then(result => {
-      result.forEach(function(item) {
+      result.forEach(function (item) {
         array.push('\n- [' + item.message_key + ']')
       })
       var response = 'Respon sek tak simpen:' + array.toString()
@@ -96,9 +97,13 @@ bot.command('about', (ctx) => {
   ctx.reply('https://github.com/yusufaw/mbot')
 })
 bot.on('text', ctx => {
+  if (ctx.message.text.toUpperCase().includes("oyen".toUpperCase())) {
+    sendMeows(ctx);
+    return;
+  }
   CommandService.listCommand(ctx.message.chat.id)
     .then(result => {
-      const res = result.filter(function(x) {
+      const res = result.filter(function (x) {
         return ctx.message.text.toUpperCase().includes(x.message_key.toUpperCase())
       })
       const resRandom = res[Math.floor(Math.random() * res.length)]
@@ -111,5 +116,33 @@ bot.on('text', ctx => {
     });
 })
 bot.launch()
+
+function sendMeows(ctx) {
+  var numberOfMeows = Math.floor(Math.random() * 15); // Random number of meows between 0 and 14.
+  var meows = "Miaw"; // Always start with 1 capitalized meow
+  ctx.reply(meows).then(res => {
+    console.log(res);
+    if (numberOfMeows == 0) {
+      meows += "."; // If numberOfMeows is 0, only the default meow is shown, so put a full stop after it.
+
+      bot.telegram.editMessageText(res.chat.id, res.message_id, undefined, meows)
+    } else {
+      for (var i = 0; i < numberOfMeows; i++) {
+        setTimeout(function () {
+          if (numberOfMeows < 4 && i == numberOfMeows - 1) { // Check if this is the final meow.
+            meows += " miaw!"; // Three meows or fewer gets an exclamation point.
+            bot.telegram.editMessageText(res.chat.id, res.message_id, undefined, meows)
+          } else if (i == numberOfMeows - 1) {
+            meows += " miaw."; // Longer replies get a full stop.
+            bot.telegram.editMessageText(res.chat.id, res.message_id, undefined, meows)
+          } else {
+            meows += " miaw"; // If it is not the last meow, just return a meow.
+            bot.telegram.editMessageText(res.chat.id, res.message_id, undefined, meows)
+          }
+        }, i * 500, i)
+      }
+    }
+  })
+}
 
 module.exports = app;
