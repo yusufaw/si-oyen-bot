@@ -119,9 +119,8 @@ bot.launch()
 
 function sendMeows(ctx) {
   var numberOfMeows = Math.floor(Math.random() * 15); // Random number of meows between 0 and 14.
-  var meows = "Miaw"; // Always start with 1 capitalized meow
+  var meows = "Miaaw"; // Always start with 1 capitalized meow
   ctx.reply(meows).then(res => {
-    console.log(res);
     if (numberOfMeows == 0) {
       meows += "."; // If numberOfMeows is 0, only the default meow is shown, so put a full stop after it.
 
@@ -130,13 +129,13 @@ function sendMeows(ctx) {
       for (var i = 0; i < numberOfMeows; i++) {
         setTimeout(function () {
           if (numberOfMeows < 4 && i == numberOfMeows - 1) { // Check if this is the final meow.
-            meows += " miaw!"; // Three meows or fewer gets an exclamation point.
+            meows += " miaaw!"; // Three meows or fewer gets an exclamation point.
             bot.telegram.editMessageText(res.chat.id, res.message_id, undefined, meows)
           } else if (i == numberOfMeows - 1) {
-            meows += " miaw."; // Longer replies get a full stop.
+            meows += " miaaw."; // Longer replies get a full stop.
             bot.telegram.editMessageText(res.chat.id, res.message_id, undefined, meows)
           } else {
-            meows += " miaw"; // If it is not the last meow, just return a meow.
+            meows += " miaaw"; // If it is not the last meow, just return a meow.
             bot.telegram.editMessageText(res.chat.id, res.message_id, undefined, meows)
           }
         }, i * 500, i)
