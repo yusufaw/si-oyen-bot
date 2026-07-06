@@ -2,6 +2,7 @@ const express = require('express');
 const res = require('express/lib/response');
 var path = require('path');
 const { Telegraf } = require('telegraf')
+const fetch = require('node-fetch');
 require('dotenv').config();
 
 var index = require('./routes/index');
