@@ -96,6 +96,23 @@ bot.command('list', (ctx) => {
 bot.command('about', (ctx) => {
   ctx.reply('https://github.com/yusufaw/mbot')
 })
+bot.command('pdam', (ctx) => {
+  fetch('https://be-app.pdamtirtasembada.co.id/api/pub/info-pelanggan/web?no-pelanggan=' + process.env.PDAM_ID_NUMBER)
+    .then(res => res.json())
+    .then(data => {
+      if (!data.rekair || data.rekair.length === 0) {
+        return ctx.reply('Ora ono tagihan, wis lunas kabeh!')
+      }
+      const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
+      const periode = data.rekair[0].periode_rek
+      const namaBulan = bulan[parseInt(periode.slice(4, 6), 10) - 1]
+      return ctx.reply('Tagihan bulan ' + namaBulan + ' adalah ' + data.total.blmLunas)
+    })
+    .catch(err => {
+      console.log(err)
+      return ctx.reply('lagi error bos!')
+    })
+})
 bot.on('text', ctx => {
   if (ctx.message.text.toUpperCase().includes("oyen".toUpperCase())) {
     sendMeows(ctx);
